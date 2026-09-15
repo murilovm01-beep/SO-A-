@@ -1,0 +1,25 @@
+#include <mancha.h>
+int prox = 1;
+void relog();
+int getRelog();
+int rand(int seed);
+int main() {
+  relog();
+  
+  for (int i = 0; i < 5; i++) {
+    print_int(rand(getRelog()));
+  }
+}
+int rand(int seed) {
+  prox = seed * 25173 + 13849;
+  return prox & 32767;
+}
+int getRelog() {
+  int alto = mancha_in(32);
+  int baixo = mancha_in(33);
+  return ((alto & 255) << 8) | (baixo & 255);
+}
+void relog() {
+  mancha_out(34, 255);
+  mancha_out(35, 255);
+}

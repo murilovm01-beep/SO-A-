@@ -1,0 +1,43 @@
+[SO] T2 -- escalonador prioridade, quantum 5 x 4000 instrucoes
+init: cenario 3
+cpu(40): inicio
+cpu(30): inicio
+cpu(20): inicio
+cpu(10): inicio
+cpu(10): fim, resultado 215
+cpu(20): fim, resultado 253
+cpu(30): fim, resultado 317
+cpu(40): fim, resultado 586
+init: fim
+
+============ SO: metricas da execucao ============
+escalonador: prioridade   quantum: 5 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 5
+tempo total de execucao ........ 649565
+tempo ocioso ................... 0  (0 vezes)
+tempo no nucleo ................ 192050  (maior entrada: 2536)
+preempcoes ..................... 30
+trocas de contexto ............. 34
+interrupcoes recebidas:
+   2 instrucao privilegiada       0
+   7 chamada de sistema         215
+   8 console                      0
+  10 relogio                    162
+chamadas: le=0 escreve=202 cria=4 mata=5 espera=4
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        3   649565      1   3   1   3           0
+  2 cpu        40   620763     11  12   0  12           -
+  3 cpu        30   566507      8   9   0   9           -
+  4 cpu        20   490467      6   7   0   7           -
+  5 cpu        10   382461      4   5   0   5           -
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init          78323    533262     37980         0    649565
+  2 cpu          396140         0    224623     14318    635081
+  3 cpu          391956         0    174551     15971    582478
+  4 cpu          361503         0    128964     18228    508695
+  5 cpu          299014         0     83447     19957    402418
+==================================================
+[executor] CPU parada (halt) apos 707306 instrucoes (321998 em modo supervisor, das quais 0 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 652177

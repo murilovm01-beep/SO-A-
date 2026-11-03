@@ -1,0 +1,55 @@
+[SO] T2 -- escalonador prioridade, quantum 5 x 4000 instrucoes
+init: cenario 2
+cpu(40): inicio
+cpu(20): inicio
+eco: um
+escritor: linha 1
+escritor: linha 2
+eco: dois
+escritor: linha 3
+eco: tres
+escritor: linha 4
+escritor: linha 5
+eco: quatro
+cpu(20): fiescritor: linha 6
+m, resultado 253
+escritor: linha 7
+escritor: linha 8
+escritor: linha 9
+escritor: linha 10
+cpu(40): fim, escritor: linha 11
+resultado 586
+escritor: linha 12
+init: fim
+
+============ SO: metricas da execucao ============
+escalonador: prioridade   quantum: 5 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 5
+tempo total de execucao ........ 706635
+tempo ocioso ................... 0  (0 vezes)
+tempo no nucleo ................ 289202  (maior entrada: 2706)
+preempcoes ..................... 30
+trocas de contexto ............. 40
+interrupcoes recebidas:
+   2 instrucao privilegiada       0
+   7 chamada de sistema         406
+   8 console                      4
+  10 relogio                    176
+chamadas: le=20 escreve=373 cria=4 mata=5 espera=4
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        2   706635      1   4   2   4           0
+  2 cpu        40   649635     11  12   0  12           -
+  3 eco         4   367836      0   5   4   5        9911
+  4 cpu        20   456184      6   7   0   7           -
+  5 escritor   12   675642     12  13   0  13           -
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init          69669    595992     40974         0    706635
+  2 cpu          426518         0    223117     14317    663952
+  3 eco           63701    235319     68816     15970    383806
+  4 cpu          323401         0    132783     18300    474484
+  5 escritor     434697         0    240945     20028    695670
+==================================================
+[executor] CPU parada (halt) apos 765825 instrucoes (459689 em modo supervisor, das quais 0 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 709247

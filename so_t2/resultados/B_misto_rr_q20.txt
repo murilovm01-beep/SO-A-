@@ -1,0 +1,55 @@
+[SO] T2 -- escalonador round-robin, quantum 20 x 4000 instrucoes
+init: cenario 2
+cpu(40): inicio
+eco: um
+cpu(20): inicio
+escritor: linha 1
+escritor: linha 2
+escritor: linha 3
+escritor: linha 4
+escritor:eco: dois
+eco: tres
+eco: quatro
+cpu(20): fim, resultado 253
+ linha 5
+escritor: linha 6
+escritor: linha 7
+escritor: linha 8
+escritor: licpu(40): fim, resultado 586
+nha 9
+escritor: linha 10
+escritor: linha 11
+escritor: linha 12
+init: fim
+
+============ SO: metricas da execucao ============
+escalonador: round-robin   quantum: 20 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 5
+tempo total de execucao ........ 663157
+tempo ocioso ................... 0  (0 vezes)
+tempo no nucleo ................ 247860  (maior entrada: 2492)
+preempcoes ..................... 5
+trocas de contexto ............. 12
+interrupcoes recebidas:
+   2 instrucao privilegiada       0
+   7 chamada de sistema         406
+   8 console                      4
+  10 relogio                    165
+chamadas: le=20 escreve=373 cria=4 mata=5 espera=4
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        2   663157      0   2   1   2       68158
+  2 cpu        40   567338      2   3   0   3           -
+  3 eco         4   387319      0   2   1   2      201334
+  4 cpu        20   433074      1   2   0   2           -
+  5 escritor   12   629225      2   3   0   3           -
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init          68158    558780     36219         0    663157
+  2 cpu          356745         0    210593     14324    581662
+  3 eco          285383     36564     65372     15977    403296
+  4 cpu          307091         0    125983     18307    451381
+  5 escritor     404235         0    224990     20595    649820
+==================================================
+[executor] CPU parada (halt) apos 722137 instrucoes (416012 em modo supervisor, das quais 0 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 665794

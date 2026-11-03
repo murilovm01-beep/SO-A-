@@ -1,0 +1,43 @@
+[SO] T2 -- escalonador round-robin, quantum 1 x 4000 instrucoes
+init: cenario 3
+cpucpu((430):cpucpu(0) ini(2010):: incio
+): i iniicionicicio
+
+o
+cpu(10): fim, resultado 215
+cpu(20): fim, resultado 253
+cpu(30): fim, resultado 317
+cpu(40): fim, resultado 586
+init: fim
+
+============ SO: metricas da execucao ============
+escalonador: round-robin   quantum: 1 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 5
+tempo total de execucao ........ 815079
+tempo ocioso ................... 0  (0 vezes)
+tempo no nucleo ................ 349436  (maior entrada: 2507)
+preempcoes ..................... 203
+trocas de contexto ............. 182
+interrupcoes recebidas:
+   2 instrucao privilegiada       0
+   7 chamada de sistema         215
+   8 console                      0
+  10 relogio                    203
+chamadas: le=0 escreve=202 cria=4 mata=5 espera=4
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        3   815079     10  12   1  12           0
+  2 cpu        40   779711     74  75   0  75           -
+  3 cpu        30   703275     54  55   0  55           -
+  4 cpu        20   592263     40  41   0  41           -
+  5 cpu        10   415250     25  26   0  26           -
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init          22011    747980     45088         0    815079
+  2 cpu          495146         0    284565     17809    797520
+  3 cpu          483980         0    219295     19462    722737
+  4 cpu          429774         0    162489     29835    622098
+  5 cpu          311608         0    103642     31564    446814
+==================================================
+[executor] CPU parada (halt) apos 873768 instrucoes (488419 em modo supervisor, das quais 0 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 817691

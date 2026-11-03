@@ -1,0 +1,55 @@
+[SO] T2 -- escalonador round-robin, quantum 5 x 4000 instrucoes
+init: cenario 2
+cpecceuops(:uc4 (r0u2i)m0t:
+)o ec:rio :n:i i nlcdiiiocnoiih
+soa
+ec
+ o:1
+ tesrecrs
+itecoro:cp: qu ua(ltr2io
+0n):hcp auf (i24m
+0,e) s:rc erfsiiutmlo,tr a:rd eols iu2nl5ht3aa
+ d3o
+ es5c8r6i
+tor: linha 4
+escritor: linha 5
+escritor: linha 6
+escritor: linha 7
+escritor: linha 8
+escritor: linha 9
+escritor: linha 10
+escritor: linha 11
+escritor: linha 12
+init: fim
+
+============ SO: metricas da execucao ============
+escalonador: round-robin   quantum: 5 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 5
+tempo total de execucao ........ 1546076
+tempo ocioso ................... 311541  (161 vezes)
+tempo no nucleo ................ 931797  (maior entrada: 3498)
+preempcoes ..................... 17
+trocas de contexto ............. 188
+interrupcoes recebidas:
+   2 instrucao privilegiada       0
+   7 chamada de sistema         406
+   8 console                      4
+  10 relogio                    386
+chamadas: le=20 escreve=373 cria=4 mata=5 espera=4
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        2  1546076      0  25  24  25           0
+  2 cpu        40   860516     12  55  42  55        2763
+  3 eco         4   602046      0  27  26  27       16243
+  4 cpu        20   807877      5  48  42  48        6038
+  5 escritor   12  1442457      0 188 187 188        2395
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init              0   1474895     71181         0   1546076
+  2 cpu          322471    208098    329947     62121    922637
+  3 eco          432100     60833    109113     63773    665819
+  4 cpu          396310    187686    223881     66102    873979
+  5 escritor     466398    475646    500413     67830   1510287
+==================================================
+[executor] CPU parada (halt) apos 1610944 instrucoes (1304763 em modo supervisor, das quais 157874 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 1548727

@@ -1,0 +1,161 @@
+[SO] T2 -- escalonador prioridade, quantum 5 x 4000 instrucoes
+[SO] criado pid 1 (init)
+init: cenario 1
+init: [1] erros nas chamadas
+  espera_proc(1), o proprio init -> -1
+  espera_proc(99), nao existe -> -1
+  mata_proc(99), nao existe -> -1
+  cria_proc(xyz), programa inexistente -> -1
+init: [2] protecao (S=0, I=0): o SO mata quem tenta
+[SO] criado pid 2 (proibido)
+proibido: vou fazer outb direto na console...
+[SO] pid 2 (proibido) morto: instrucao privilegiada em ip=55AA
+[SO] terminou pid 2
+  espera_proc(proibido) -> 0
+[SO] criado pid 3 (proibido)
+proibido: vou executar halt...
+[SO] pid 3 (proibido) morto: instrucao privilegiada em ip=55AE
+[SO] terminou pid 3
+  espera_proc(proibido) -> 0
+[SO] criado pid 4 (proibido)
+proibido: vou dividir por zero...
+[SO] pid 4 (proibido) morto: divisao por zero em ip=5D82
+[SO] terminou pid 4
+  espera_proc(proibido) -> 0
+init: [3] fim retornando de main + espera
+[SO] criado pid 5 (filho)
+  cria_proc(filho) -filho(3): calculando
+filho(3): terminando (retorno de main)
+[SO] terminou pid 5
+> 5
+  espera_proc(filho) -> 0
+init: [4] matar outro processo
+[SO] criado pid 6 (laco)
+  cria_proc(laco) -> 6
+[SO] terminou pid 6
+  mata_proc(laco) -> 0
+  espera_proc(laco, ja terminou) -> 0
+init: [5] processo que cria processos
+[SO] criado pid 7 (pai)
+[SO] criado pid 8 (filho)
+pai: criei o filhfilho(1): calculando
+o de pid 8
+[SO] criado pid 9 (filho)
+pai: criei filho(2): calculando
+filho(1): terminando (rfilho(2): terminao filho de pid 9
+etorno de main)
+[SO] terminou pid 8
+pai: o filho de pid 8 morreu
+ndo (retorno de main)
+[SO] terminou pid 9
+pai: o filho de pid 9 morreu
+[SO] terminou pid 7
+  espera_proc(pai) -> 0
+init: [6] tabela cheia e pid != entrada da tabela
+[SO] criado pid 10 (laco)
+  cria_proc(laco) -> 10
+[SO] criado pid 11 (laco)
+  cria_proc(laco) -> 11
+[SO] criado pid 12 (laco)
+  cria_proc(laco) -> 12
+[SO] criado pid 13 (laco)
+  cria_proc(laco) -> 13
+[SO] criado pid 14 (laco)
+  cria_proc(laco) -> 14
+[SO] criado pid 15 (laco)
+  cria_proc(laco) -> 15
+[SO] criado pid 16 (laco)
+  cria_proc(laco) -> 16
+  cria_proc(laco) -> -1
+[SO] terminou pid 10
+[SO] terminou pid 11
+[SO] terminou pid 12
+[SO] terminou pid 13
+[SO] terminou pid 14
+[SO] terminou pid 15
+[SO] terminou pid 16
+  processos laco mortos -> 7
+init: [7] leitura bloqueante: 2 leitores na mesma console
+  (cada SO_LE pega 1 caractere; digite 2 linhas)
+[SO] criado pid 17 (eco)
+[SO] criado pid 18 (eco)
+eco: ptada
+[SO] terminou pid 17
+  espera_proc(eco 1) -> 0
+eco: rimeira linha digisegunda linha digitad
+[SO] terminou pid 18
+  espera_proc(eco 2) -> 0
+init: [8] matar processo bloqueado na leitura
+[SO] criado pid 19 (eco)
+[SO] criado pid 20 (filho)
+filho(1): calculando
+filho(1): terminando (retorno de main)
+[SO] terminou pid 20
+[SO] terminou pid 19
+  mata_proc(eco bloqueado) -> 0
+  espera_proc(eco, ja terminou) -> 0
+init: fim
+[SO] terminou pid 1
+
+============ SO: metricas da execucao ============
+escalonador: prioridade   quantum: 5 interrupcoes   intervalo do relogio: 4000 instrucoes
+processos criados .............. 20
+tempo total de execucao ........ 3585865
+tempo ocioso ................... 49636  (2 vezes)
+tempo no nucleo ................ 1320981  (maior entrada: 3230)
+preempcoes ..................... 169
+trocas de contexto ............. 86
+interrupcoes recebidas:
+   2 instrucao privilegiada       2
+   3 divisao por zero             1
+   7 chamada de sistema        1784
+   8 console                      2
+  10 relogio                    896
+chamadas: le=48 escreve=1683 cria=21 mata=18 espera=14
+
+por processo (tempos em instrucoes; P=pronto B=bloqueado E=executando)
+pid programa  arg  retorno preemp  nP  nB  nE  resp.media
+  1 init        1  3585865     48  56   7  56           0
+  2 proibido    0    40867      2   3   0   3           -
+  3 proibido    1    29254      1   2   0   2           -
+  4 proibido    2    31169      1   2   0   2           -
+  5 filho       3    80146      3   4   0   4           -
+  6 laco        0   160507      7   8   0   7           -
+  7 pai         2   221005      4   7   2   7           0
+  8 filho       1   143643      2   3   0   3           -
+  9 filho       2   144456      3   4   0   4           -
+ 10 laco        0  1895918     14  15   0  14           -
+ 11 laco        0  1857221     14  15   0  14           -
+ 12 laco        0  1677787     14  15   0  14           -
+ 13 laco        0  1458796     14  15   0  14           -
+ 14 laco        0  1198712     13  14   0  13           -
+ 15 laco        0   918055     12  13   0  12           -
+ 16 laco        0   618520     11  12   0  11           -
+ 17 eco         1    67420      0   2   1   2       16382
+ 18 eco         1   176565      4   7   2   7           0
+ 19 eco         1    66263      0   1   1   1           -
+ 20 filho       1    60071      2   3   0   3           -
+pid programa   t.pronto    t.bloq    t.exec   criacao   termino
+  1 init        2040816    516361   1028688         0   3585865
+  2 proibido       2469         0     38398    204793    245660
+  3 proibido       3098         0     26156    271992    301246
+  4 proibido       3020         0     28149    327677    358846
+  5 filho         17628         0     62518    418879    499025
+  6 laco          20995         0    139512    550387    710894
+  7 pai           82369     33676    104960    792013   1013018
+  8 filho         89556         0     54087    797141    940784
+  9 filho         85475         0     58981    841879    986335
+ 10 laco        1615919         0    279999   1074663   2970581
+ 11 laco        1577684         0    279537   1236892   3094113
+ 12 laco        1398344         0    279443   1418232   3096019
+ 13 laco        1178844         0    279952   1639650   3098446
+ 14 laco         938899         0    259813   1902198   3100910
+ 15 laco         678375         0    239680   2184785   3102840
+ 16 laco         399806         0    218714   2486798   3105318
+ 17 eco           20975     26135     20310   3215011   3282431
+ 18 eco           40512     56324     79729   3217554   3394119
+ 19 eco            5003     58978      2282   3454432   3520695
+ 20 filho          4750         0     55321   3456967   3517038
+==================================================
+[executor] CPU parada (halt) apos 3780678 instrucoes (2058591 em modo supervisor, das quais 40000 no laco ocioso)
+[executor] o SO comecou o relatorio final na instrucao 3588727

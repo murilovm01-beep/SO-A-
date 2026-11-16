@@ -1,10 +1,3 @@
-// so.c -- SO do T2 (processos)
-//
-// roda em cima da bios. o que não dá pra fazer em C está no ponte.asm.
-//
-// toda interrupção que o SO trata passa por so_trata_interrupcao():
-//   salva o quadro do processo -> trata a interrupção -> pendências ->
-//   escalona -> copia o quadro do escolhido de volta (o ponte.asm dá o rete)
 
 #include "comum.h"
 #include "config.h"
@@ -59,8 +52,7 @@ struct processo {
     int desbloqueou;    // tique em que desbloqueou, -1 se não está esperando a CPU
 };
 
-// as métricas ficam por pid e não na tabela, porque quando o processo
-// morre a entrada da tabela é reaproveitada e eu perdia os números
+
 struct metricas {
     int prog;
     int arg;
@@ -114,9 +106,7 @@ int n_int_console;      // quem soma é o ponte.asm (a console é da bios)
 char *nome_exc[5] = { "-", "violacao de segmento", "instrucao privilegiada",
                       "divisao por zero", "instrucao ilegal" };
 
-// ------------------------------------------------------------ estados
 
-// toda troca de estado passa aqui, assim as métricas ficam num lugar só
 void muda_estado(struct processo *p, int novo)
 {
     int agora = tiques();
@@ -164,7 +154,7 @@ void fica_pronto(int i)
     fila_poe(i);
 }
 
-// -------------------------------------------------------- processos
+// processos
 
 int compara(char *a, char *b)
 {
@@ -219,10 +209,6 @@ int cria_processo(int prog, int arg)
     }
     p = &tab[i];
 
-    // monto a pilha como se alguém tivesse chamado a função do programa:
-    // no topo o endereço de retorno e em cima o argumento (o mcc pega o
-    // argumento em bp+4). o retorno é o proc_retorno, que mata o processo,
-    // então quando o main acaba o processo termina sozinho
     topo = &pilhas[i][TAM_PILHA - 2];
     topo[0] = (int) proc_retorno;
     topo[1] = arg;
@@ -330,10 +316,6 @@ void preempta(void)
     atual = -1;
 }
 
-// ------------------------------------------------ chamadas de sistema
-// os argumentos e a resposta ficam no quadro salvo do processo
-// (r0 = número, r1 e r2 = argumentos). quando o rete restaura o quadro,
-// o r0 que eu escrevi aqui vira o retorno da chamada
 
 void chamada_le(struct processo *p)
 {
@@ -416,7 +398,6 @@ void trata_chamada(void)
     }
 }
 
-// ---------------------------------------------------- interrupções
 
 void trata_relogio(void)
 {
@@ -429,7 +410,6 @@ void trata_relogio(void)
     }
 }
 
-// um processo fez o que não podia: mato só ele
 void trata_excecao(int irq)
 {
     k_imprime("[SO] pid ");
@@ -442,7 +422,6 @@ void trata_excecao(int irq)
     mata_processo(atual);
 }
 
-// vê se o que um processo bloqueado estava esperando já está pronto
 void trata_pendencias(void)
 {
     int i;
@@ -461,13 +440,12 @@ void trata_pendencias(void)
     }
 }
 
-// ------------------------------------------------------- escalonador
 
 void despacha(int i)
 {
     struct processo *p = &tab[i];
     int pid = p->pid;
-    // tempo de resposta: de quando desbloqueou até agora
+
     if (p->desbloqueou >= 0) {
         if (pid < MAX_PID) {
             met[pid].resp_soma += tiques() - p->desbloqueou;
@@ -480,8 +458,6 @@ void despacha(int i)
     quantum_restante = QUANTUM;
 }
 
-// escolhe quem executa. se o que estava executando ainda pode continuar
-// (não bloqueou, não morreu, não acabou o quantum), ele continua
 void so_escalona(void)
 {
     int k = 0;
@@ -497,20 +473,17 @@ void so_escalona(void)
             }
         }
     } else if (ESCALONADOR == ESC_PRIORIDADE) {
-        // o de menor prio; no empate fica o que está há mais tempo na fila
+
         for (j = 1; j < n_fila; j++) {
             if (tab[fila[j]].prio < tab[fila[k]].prio) {
                 k = j;
             }
         }
     }
-    // round-robin: k = 0, o primeiro da fila
+
     despacha(fila_tira(k));
 }
 
-// ------------------------------------------------------- relatório
-// a janela da console do simulador só mostra 6 linhas, então imprimo de
-// 5 em 5 e espero um E (enter) pra continuar
 
 int linhas;
 
@@ -522,8 +495,7 @@ void fim_linha(void)
         while (console_tem_tecla()) {
             console_le_tecla();
         }
-        // sem \n, senão a última linha da janela fica vazia e some uma
-        // linha do relatório
+
         k_imprime("      (E para continuar)");
         while (!console_tem_tecla()) {
         }
@@ -554,8 +526,6 @@ void num(int v, int largura)
     }
     k_dec(v);
 }
-
-// texto alinhado à esquerda
 void texto(char *s, int largura)
 {
     int n = 0;
@@ -590,8 +560,6 @@ void relatorio(void)
 
     prepara_relatorio();
     linhas = 0;
-
-    // quem ainda está vivo: soma o tempo do estado em que está agora
     for (i = 0; i < MAX_PROC; i++) {
         if (tab[i].estado != LIVRE && tab[i].pid < MAX_PID) {
             met[tab[i].pid].tempo[tab[i].estado] += agora - tab[i].desde;
@@ -660,7 +628,7 @@ void relatorio(void)
         num(m->tempo[BLOQUEADO], 4);
         num(m->tempo[EXECUTANDO], 4);
         if (m->resp_n > 0) {
-            // média com uma casa depois da vírgula
+
             x = m->resp_soma * 10 / m->resp_n;
             num(x / 10, 3);
             k_putc('.');
@@ -673,11 +641,6 @@ void relatorio(void)
     k_imprime("fim");
 }
 
-// ------------------------------------------------- entrada do SO
-
-// salva o quadro que a cpu empilhou na entrada de quem estava executando.
-// tem que copiar porque toda interrupção empilha no mesmo lugar e a
-// próxima apagaria esse
 void salva_quadro(int *quadro)
 {
     if (atual >= 0) {
@@ -685,15 +648,11 @@ void salva_quadro(int *quadro)
     }
 }
 
-// põe o quadro de quem vai executar no lugar de onde o rete lê
 void recupera_quadro(int *quadro)
 {
     copia_quadro(quadro, tab[atual].quadro);
 }
 
-// chamada pelo ponte.asm em toda interrupção. quadro = onde a cpu
-// empilhou os registradores de quem foi interrompido (pilha_sistema-32).
-// devolve 0 = dá rete no quadro, 1 = fica ocioso, 2 = desliga
 int so_trata_interrupcao(int irq, int *quadro)
 {
     if (ocioso) {
@@ -701,8 +660,6 @@ int so_trata_interrupcao(int irq, int *quadro)
         ocioso = 0;
     }
     n_int[irq]++;
-
-    // exceção dentro do próprio SO (S=1 no quadro): não tem o que fazer
     if (irq < 7 && (atual < 0 || (quadro[SR] & 0x8000))) {
         k_imprime("[SO] PANICO: excecao dentro do SO\n");
         return 2;
@@ -739,7 +696,6 @@ int so_trata_interrupcao(int irq, int *quadro)
 int so_inicia(int *quadro)
 {
     int i;
-    // zera tudo, porque o R do simulador refaz o boot sem recarregar a memória
     for (i = 0; i < MAX_PROC; i++) {
         tab[i].estado = LIVRE;
     }

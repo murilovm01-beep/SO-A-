@@ -1,4 +1,4 @@
-// config.h -- configuração do SO. muda aqui e roda make de novo.
+
 // (o intervalo do relógio fica no ponte.asm, INTERVALO)
 
 #define ESCALONADOR  ESC_ROUND_ROBIN   // ESC_SIMPLES, ESC_ROUND_ROBIN ou ESC_PRIORIDADE

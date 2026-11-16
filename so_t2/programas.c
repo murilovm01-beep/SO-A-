@@ -1,4 +1,4 @@
-// programas.c -- os programas que rodam como processos
+
 
 #include "usuario.h"
 #include "programas.h"
@@ -42,7 +42,6 @@ void eco(int n)
 {
     char linha[40];
     int i;
-    // imprime pouco de propósito: cada caractere é uma chamada de sistema
     print_str("eco: digite ");
     print_int(n);
     putchar(10);
@@ -99,8 +98,6 @@ void pai(int n)
         puts(" morreu");
     }
 }
-
-// ------------------------------------------------------------ cenários
 
 void testes(void)
 {

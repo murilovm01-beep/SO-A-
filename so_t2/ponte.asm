@@ -1,8 +1,4 @@
-; ponte.asm -- parte do SO em assembly (o resto está em so.c)
-;
-; fiz em cima do exemplo multitarefa_c da bios. aqui fica só o que não dá
-; pra fazer em C: instalar os tratadores, programar o relógio, o primeiro
-; rete, o laço ocioso e umas funções pro C chamar as rotinas da bios.
+
 
         .equ    INTERVALO = 4000        ; instruções entre interrupções do relógio
 
@@ -94,10 +90,6 @@ _so_int_console:
         st      r0, (_g_n_int_console)
         jmp     _bios_trata_console
 
-; todos os tratadores do SO chegam aqui com r0 = número da interrupção e
-; sp apontando pro quadro que a cpu empilhou (pilha_sistema-32).
-; o SO roda na pilha_nucleo, porque a pilha_sistema é sobrescrita a cada
-; interrupção (isso está no README da bios)
 _so_entrada:
         ld      r1, sp
         ld      sp, pilha_nucleo

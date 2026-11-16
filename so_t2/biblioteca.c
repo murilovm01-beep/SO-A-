@@ -1,5 +1,3 @@
-// biblioteca.c -- peguei o rt/biblioteca.c do compilador_c e troquei o
-// acesso direto às portas pelas chamadas de sistema
 
 #include "usuario.h"
 

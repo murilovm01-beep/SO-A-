@@ -1,8 +1,4 @@
-; usuario.asm -- chamadas de sistema do lado do processo
-;
-; número da chamada em r0, argumentos em r1 e r2, trap 7. quando o SO
-; devolve a CPU, o rete restaura os registradores e o r0 já vem com a
-; resposta. (convenção do mcc: 1º argumento em bp+4, 2º em bp+6)
+
 
 ; int so_le(void)
 _f_so_le:

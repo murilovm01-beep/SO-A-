@@ -1,5 +1,4 @@
-// programas.h -- programas que o SO sabe criar (a tabela está no so.c)
-// todo programa é "void nome(int arg)"; quando a função acaba o processo morre
+
 
 #ifndef PROGRAMAS_H
 #define PROGRAMAS_H
